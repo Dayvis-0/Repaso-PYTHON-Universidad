@@ -5,13 +5,13 @@ class PriorityQueueBase:
 
         def __init__(self, key, value):
             self._key = key
-            self._vavalue =value
+            self._value = value
             
         def __lt__(self, other):
             
             return self._key < other._key
 
-        def __repr__(self):
+        def __repr__(self): 
             
             return '({0},{1})'.format(self._key, self._value)
 

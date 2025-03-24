@@ -5,12 +5,12 @@ class PositionalList(_DoublyLinkedBase):
 
     #------------------------- clase Position anidada ---------------------
     class Position:
-        """Unna abstraccion que representa lla ubicacion de un elemento"""
+        """Una abstraccion que representa la ubicacion de un elemento"""
 
         def __init__(self, container, node):
             """Constructor que no sera invocado por el usuario"""
             
-            self._container =container
+            self._container = container
             self._node = node
             
         def element(self):
@@ -30,7 +30,7 @@ class PositionalList(_DoublyLinkedBase):
 
     #------------------- metodo utilitario --------------------------------
     def _validate(self, p):
-        """Devuellve posicion del nodo, u originar el error apropieado"""
+        """Devuelve posicion del nodo, u originar el error apropiado"""
 
         if not isinstance(p, self.Position):
             raise TypeError('p debe ser de tipo Position')
@@ -63,7 +63,7 @@ class PositionalList(_DoublyLinkedBase):
     def before(self, p):
         """Devolver la posicion justo antes de la posicion p"""
 
-        node = self._validate((p))
+        node = self._validate(p)
         
         return self._make_position(node._prev)
 
@@ -83,7 +83,7 @@ class PositionalList(_DoublyLinkedBase):
             yield cursor.element()
             cursor = self.after(cursor)
 
-    #-------------------- modificadores
+    #-------------------- modificadores ------------------------------------------
     def _insert_between(self, e, predecesor, sucesor):
         """Agrega un elemento entre nodos existentes y devuelve Position"""
 

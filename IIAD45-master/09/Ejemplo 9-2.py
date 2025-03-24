@@ -52,3 +52,19 @@ class UnsortedPriorityQueue(PriorityQueueBase):
     p = self._find_min()
     item = self._data.delete(p)
     return (item._key, item._value)
+
+  def __str__(self):
+      """Devuelve una representacion en cadena de la cola de prioridad"""
+
+      return ' <-> '.join(['[' + str(item) + ']' for item in self._data])
+  
+copi = UnsortedPriorityQueue()        
+
+copi.add(1, 'a')
+copi.add(2, 'b')
+copi.add(3, 'c')
+
+print(copi)
+print(f'El minimo valor es : {copi.min()[0]}')
+print(f'Removideno el minimo: {copi.remove_min()}')
+print(copi)

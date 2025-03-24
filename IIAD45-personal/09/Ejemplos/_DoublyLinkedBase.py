@@ -23,7 +23,7 @@ class _DoublyLinkedBase:
 
         return self._size
     
-    def is_enmpty(self):
+    def is_empty(self):
         """Devueve True si la lista esta vacia"""
 
         return self._size == 0
@@ -47,6 +47,8 @@ class _DoublyLinkedBase:
         sucesor._prev = predecesor
         self._size -= 1 
         element = node._element
+        
+        node._element = None
         node._prev = node._next = None
         
         return element
