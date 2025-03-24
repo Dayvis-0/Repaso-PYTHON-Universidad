@@ -1,0 +1,21 @@
+2025-01-18 22:37:14,016 - DEBUG - Mensaje de depuración
+2025-01-18 22:37:14,016 - INFO - Mensaje informativo
+2025-01-18 22:37:14,016 - WARNING - Mensaje de advertencia
+2025-01-18 22:37:14,016 - ERROR - Mensaje de error
+2025-01-18 22:37:14,016 - CRITICAL - Mensaje crítico
+2025-01-18 22:37:14,016 - INFO - Resultado de 10/5 es 2.0
+2025-01-18 22:37:14,016 - ERROR - Error al dividir 10 por 0: division by zero
+2025-01-18 22:37:23,903 - DEBUG - Mensaje de depuración
+2025-01-18 22:37:23,903 - INFO - Mensaje informativo
+2025-01-18 22:37:23,903 - WARNING - Mensaje de advertencia
+2025-01-18 22:37:23,903 - ERROR - Mensaje de error
+2025-01-18 22:37:23,909 - CRITICAL - Mensaje crítico
+2025-01-18 22:37:23,909 - INFO - Resultado de 10/5 es 2.0
+2025-01-18 22:37:23,909 - ERROR - Error al dividir 10 por 0: division by zero
+2025-01-20 10:23:14,009 - DEBUG - Mensaje de depuración
+2025-01-20 10:23:14,009 - INFO - Mensaje informativo
+2025-01-20 10:23:14,009 - WARNING - Mensaje de advertencia
+2025-01-20 10:23:14,009 - ERROR - Mensaje de error
+2025-01-20 10:23:14,009 - CRITICAL - Mensaje crítico
+2025-01-20 10:23:14,009 - INFO - Resultado de 10/5 es 2.0
+2025-01-20 10:23:14,009 - ERROR - Error al dividir 10 por 0: division by zero
