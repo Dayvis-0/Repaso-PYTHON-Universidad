@@ -31,3 +31,5 @@ class ChainHashMap(HashMapBase):
       if bucket is not None:                         # un slot no vacio
         for key in bucket:
           yield key
+          
+          

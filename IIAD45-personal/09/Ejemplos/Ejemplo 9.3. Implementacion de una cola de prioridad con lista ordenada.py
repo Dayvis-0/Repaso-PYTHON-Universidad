@@ -56,3 +56,22 @@ class SortedPriorityQueue(PriorityQueueBase):
         item = self._data.delete(self._data.first())
 
         return (item._key, item._value)
+    
+    def __str__(self):
+        """Devuelve una representacion en cadena de la cola de prioridad"""
+        
+        if self.is_empty():
+            raise Empty('Cola de prioridad vacia')
+
+        return ' <-> '.join(['[' + str(item) +']' for item in self._data])
+    
+coor = SortedPriorityQueue()
+
+coor.add(100,'a')
+coor.add(1,'a')
+coor.add(50,'a')
+
+print(f'\tCola de prioridad ordenada:\n{coor}')
+print(f'\nMinimo valor de la cola de prioridad:  {coor.min()[0]} y su clave: {coor.min()[1]}')
+print(f'\nEliminar el minimo valor-clave: {coor.remove_min()[0]}')
+print(f'\n\tCola de prioridad ordenada despues de la eliminacion:\n{coor}')

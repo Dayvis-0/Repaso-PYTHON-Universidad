@@ -3,6 +3,9 @@
 from PriorityQueueBase import PriorityQueueBase
 from PositionalList import PositionalList
 
+class Empty(Exception):
+    pass
+
 class UnsortedPriorityQueue(PriorityQueueBase): 
   """Una cola de prioridad orientada a minimo con una lista desordenada"""
 

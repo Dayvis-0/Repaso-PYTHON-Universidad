@@ -64,15 +64,18 @@ class UnsortedPriorityQueue(PriorityQueueBase):
     def __str__(self):
         """Devuelve una representacion en cadena de la cola de prioridad"""
         
+        if self.is_empty():
+            raise Empty('Cola de prioridad vacia')
+        
         return ' <-> '.join(['[' + str(item) + ']' for item in self._data])
     
 copi = UnsortedPriorityQueue()        
 
-copi.add(1, 'a')
-copi.add(2, 'b')
-copi.add(3, 'c')
+copi.add(3, 'a')
+copi.add(1, 'b')
+copi.add(2, 'c')
 
-print(copi)
-print(f'El minimo valor es : {copi.min()[0]}')
-print(f'Removideno el minimo: {copi.remove_min()}')
-print(copi)
+print(f'\tCola de prioridad con una lista desordenada: \n{copi}')
+print(f'\nEl minimo valor es : {copi.min()[0]} y su clave es: {copi.min()[1]}')
+print(f'\nRemovideno el minimo: {copi.remove_min()}')
+print(f'\n\tCola de prioridad con una lista desordenada despues de eliminar el minimo:\n{copi}')
