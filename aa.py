@@ -1,3 +1,5 @@
-print('Hola mundo')
+suma = []
 
-print('helo world')
+suma.append([1,2])
+
+print(suma)

@@ -22,7 +22,7 @@ class ChainsHashMap(HashMapBase):
         
         oldsize =len(self._table[j])
         self._table[j][k] = v
-        
+
         if len(self._table[j]) > oldsize:           # Key fue nueva a la tabla
             self._n += 1                            # Imcrementa el tamaño del map
             
@@ -42,7 +42,6 @@ class ChainsHashMap(HashMapBase):
                 for key in bucket:
                     yield key
                     
-
 # Crear una tabla hash con encadenamiento
 mapa = ChainsHashMap()
 

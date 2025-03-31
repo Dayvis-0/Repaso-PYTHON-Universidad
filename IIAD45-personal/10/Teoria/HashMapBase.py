@@ -1,5 +1,5 @@
 from MapBase import MapBase
-from collections import MutableMapping
+from collections.abc import MutableMapping
 from random import randrange # Usado para seleccionar parametros MAD 
 
 class HashMapBase(MapBase):
@@ -31,7 +31,7 @@ class HashMapBase(MapBase):
 
         return self._bucket_getitem(j, key)         # KeyError
 
-    def __setitiem__(self, key, value):
+    def __setitem__(self, key, value):
         
         j = self._hash_function(key)
         self._bucket_setitem(j, key, value)         # Mantiene self._n

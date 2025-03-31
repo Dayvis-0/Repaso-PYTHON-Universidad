@@ -27,7 +27,7 @@ class UnsortedTableMap(MapBase):
             if key == item._key:                    # reasigna valor
                 item._value = value                 
                 
-            return                                  # y termina
+                return                                  # y termina
         
         # No se encuentra coincidencia para key
         self._table.append(self._Item(key, value))
@@ -36,7 +36,7 @@ class UnsortedTableMap(MapBase):
         """Remove el item asociado con la clave key"""
 
         for j in range(len(self._table)):           # Encuentra coincidencia
-            if key == self._key[j]._key:            # remueve item
+            if key == self._table[j]._key:            # remueve item
                 self._table.pop(j)
 
                 return                              # y termina

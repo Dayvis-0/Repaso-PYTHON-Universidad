@@ -32,4 +32,28 @@ class ChainHashMap(HashMapBase):
         for key in bucket:
           yield key
           
-          
+# Crear una tabla hash con encadenamiento
+mapa = ChainHashMap()
+
+# Insertar valores
+mapa["nombre"] = "Alice"
+mapa["edad"] = 25
+mapa["ciudad"] = "Madrid"
+
+# Acceder a valores
+print(mapa["nombre"])  # Output: Alice
+print(mapa["edad"])    # Output: 25
+
+# Modificar un valor
+mapa["edad"] = 26
+print(mapa["edad"])    # Output: 26
+
+# Eliminar un elemento
+del mapa["ciudad"]
+
+# Verificar si una clave está en el mapa
+print("ciudad" in mapa)  # Output: False
+
+# Iterar sobre las claves
+for clave in mapa:
+    print(clave, "->", mapa[clave])

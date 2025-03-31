@@ -1,4 +1,5 @@
-"""El encapsulamiento es el principio de ocultar los detalles internos de un ubjeto y exponer solo lo necesario"""
+"""El encapsulamiento es el principio de ocultar los detalles internos de un ubjeto y restringir el acceso directo a sus datos, permitiendo la 
+interaccion solo a traves de metodos definidos. Esto ayuda a proteger la integridad del objeto  y a mantener un bajo acoplamiento entre componentes"""
 
 class BankAccount:
     def __init__(self, du, ba = 0):
