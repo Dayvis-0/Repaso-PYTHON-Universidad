@@ -1,4 +1,4 @@
-"""La abstraccion consiste en ocultar la complejidad interna y mostrar solo llaa funcionalidad esencia."""
+"""La abstraccion consiste en ocultar la complejidad interna y mostrar solo la funcionalidad esencial."""
 
 from abc import ABC, abstractmethod
 

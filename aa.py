@@ -1,5 +1,3 @@
-suma = []
+nletra = 'Hola'
 
-suma.append([1,2])
-
-print(suma)
+print(nletra.lower())
