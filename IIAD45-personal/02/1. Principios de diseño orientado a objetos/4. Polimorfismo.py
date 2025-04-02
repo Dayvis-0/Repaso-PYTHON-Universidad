@@ -1,4 +1,4 @@
-"""El polimorfismo permite que objetos de diferentes clases sean tratados como oobjetos de una clase comun"""
+"""El polimorfismo permite que objetos de diferentes clases sean tratados como objetos de una clase comun"""
 
 class Bird:
     def fly(self):
