@@ -122,19 +122,54 @@ class LinkedNAryTree(NArioTree):
         if self._root is None:
             return "Árbol vacío"
 
-        def _visualizar(p, nivel=0):
-            """Función recursiva para generar la estructura del árbol."""
-            result = "   " * nivel + str(p.element()) + "\n"
-            for hijo in self.children(p):
-                result += _visualizar(hijo, nivel + 1)
-            return result
+        return self._build_string(self._root, '', True)
+    
+    def _build_string(self, node, prefix, is_tail):
+        """Construye una representacion en cadena del arbol de forma recursiva"""
 
-        return _visualizar(self.root())
+        resullt = prefix + ("└──" if is_tail else "├──") + str(node._element) + "\n" 
+        children = [child for child in node._children if child is not None]
+
+        for i, child in enumerate(children):
+            is_last = (i== len(children) - 1)
+            resullt += self._build_string(child, prefix + ('    ' if is_tail else '|      '), is_last)
+
+        return resullt
 
 nario = LinkedNAryTree()
 
 padre = nario._add_root(1)
 hijo1 = nario.add_child(padre, 2)
+hijo2 = nario.add_child(padre, 3)
+hijo_1_de1 = nario.add_child(hijo1, 4)
+hijo3 = nario.add_child(padre, 5)
 
+print(f'El arbol al inicio es \n{nario}')
 
-print(nario)
+nario._replace(hijo1, 20)
+
+print(f'El arbol despues de reemplazar es \n{nario}')
+
+nario._delete(hijo3)
+
+print(f'El arbol despues de eliminar es \n{nario}')
+
+print(f'Preorden | padre - hijo izquiero - hijo derecho')
+for pre in nario.preorden():
+    print(pre.element(), end=' ')
+
+print(f'\n\nPostorden | hijo izquierdo - hijo derecho - padre')
+for post in nario.postorder():
+    print(post.element(), end=' ')
+    
+print(f'\n\nInorden | primera mitad de hijos- padre - segunda mitad')
+for inord in nario.inorder():
+    print(inord.element(), end=' ')
+    
+print(f'\n\nProfundidad del arbol | Cantidad de niveles que hay desde la raiz haste el nodo: {nario.depth(hijo2)}')
+
+print(f'\nAltura del arbol | La distancia maxima hacia abajo: {nario.height(padre)}')
+
+print(f'\nAmplitud de arbol | Visita los nodos nivel por nivel')
+for ampli in nario.bradhfirst():
+    print(ampli.element(), end=' ')

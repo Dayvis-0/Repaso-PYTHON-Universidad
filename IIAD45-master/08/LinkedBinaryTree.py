@@ -161,6 +161,25 @@ class LinkedBinaryTree(BinaryTree):
             node._right = t2._root 
             t2._root = None 
             t2._size = 0 
+            
+    def __str__(self):
+        """"Representacion en cadena del arbol binario"""    
+
+        if self._root is None:
+            return '<arbol vacio>'
+
+        return self._build_string(self._root, '', True)
+    
+    def _build_string(self, node, prefix, is_tail):
+        """Construye una representacion en cadena del arbol de forma recursiva"""
+
+        result = prefix + ('└──'if is_tail else '├──') + str(node._element) + '\n'
+        children = [child for child in (node._left, node._right) if child is not None]
+
+        for i, child in enumerate(children):
+            result += self._build_string(child, prefix + ('     ' if is_tail else '|       '), i == len(children) - 1)
+
+        return result   
 
 lbt = LinkedBinaryTree()
 lbt._add_root(6)
@@ -169,25 +188,20 @@ lbt._add_left(lbt.root(),4)
 lbt._add_left(lbt.left(lbt.root()),3)
 lbt._add_right(lbt.left(lbt.root()), 5)
 
-print("    6    ")
-print("   / \\ ")
-print("  4   8 ")
-print(" / \\ ")
-print("3   5 ")
-
+print(lbt)
 
 print("Preorden")
 for n in lbt.preorder():
-    print(n.element())
+    print(n.element(), end=" ")
 
-print("Postorden")
+print("\nPostorden")
 for n in lbt.postorder():
-    print(n.element())
+    print(n.element(), end=" ")
 
-print("Primero en amplitud")
+print("\nPrimero en amplitud")
 for n in lbt.breadhfirst():
-    print(n.element())
+    print(n.element(), end=" ")
     
-print("Inorden")
+print("\nInorden")
 for n in lbt.inorder():
-    print(n.element())
+    print(n.element(), end=" ")

@@ -198,6 +198,25 @@ class LinkedBinaryTree(BinaryTree):
             node._right = t2._root
             t2._root = None
             t2._size = 0    
+                    
+    def is_balanced(self, p=None):
+        """Devuelve True si el arbol es quilibrado, False si no lo es"""
+        if p is None:
+            p = self.root()
+
+        if p is None:
+            return True
+        
+        left_right = self._height2(self.left(p)) if self.left(p) else 0
+        right_height = self._height2(self.right(p)) if self.right(p) else 0
+        
+        if abs(left_right - right_height) > 1:
+            return False
+        
+        left_balanced = self.is_balanced(self.left(p)) if self.left(p) else True
+        right_balanced = self.is_balanced(self.right(p)) if self.right(p) else True
+
+        return left_balanced and right_balanced
         
     def __str__(self):
         """Representación visual del árbol binario"""
@@ -253,6 +272,7 @@ lbt2 = LinkedBinaryTree()
 
 root = lbt._add_root(1)
 n2 = lbt._add_left(root, 2)
+n1000 = lbt._add_left(root, 100)
 n3 = lbt._add_right(root, 3)
 n4 = lbt._add_left(n2, 4)
 n5 = lbt._add_right(n3,5)
@@ -279,28 +299,28 @@ print(f'El arbol es: {lbt.root().element()}')
 
 print(lbt)
 
-print('\n\tPreorden | padre - hijo izquierdo - hijo derecho |\n')
-
+print('Preorden | padre - hijo izquierdo - hijo derecho ')
 for  posi in lbt.preorden():
-    print(posi.element())
+    print(posi.element(), end=' ')
 
-print('\tPostorde | hijo izquierdo - hijo derecho - padre\n')
-
+print('\n\nPostorden | hijo izquierdo - hijo derecho - padre')
 for  posi in lbt.postorder():
-    print(posi.element())
+    print(posi.element(), end=' ')
 
-print('\tInorden | hijo izquierddo - padre - hijo derecho\n')
-
+print('\n\nInorden | hijo izquierddo - padre - hijo derecho')
 for  posi in lbt.inorder():
-    print(posi.element())
+    print(posi.element(), end=' ')
 
-print('\n\tProfundidad del arbol\n')
-print(lbt.depth(n40))
+print(f'\n\nProfundidad del arbol | Cantidad de niveles que hay desde la raiz hazta el nodo: {lbt.depth(n40)}')
 
-print('\n\t Altura del arbol\n')
-print(lbt.height(root))
+print(f'\nAltura del arbol | Distancia macimahacia abajo: {lbt.height(root)}')
 
-print('\t\nAmplitud del arbol | visita los nodos nivel por nivel\n')
-
+print('\nAmplitud del arbol | Visita los nodos nivel por nivel')
 for c in lbt.breadhfirst():
-    print(c.element())
+    print(c.element(), end=' ')
+    
+print("\nArbol en equilibrio? | Si el subarbol izquierdo y derecho tienen altura similar")
+if lbt.is_balanced():
+    print('El arbol si esta balanceado')
+else:
+    print('El arbol no si esta balanceado')

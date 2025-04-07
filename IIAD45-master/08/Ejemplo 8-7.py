@@ -191,3 +191,19 @@ n5 = lbt._add_right(n3,5)
 
 print(lbt)
 print(f'Cantidad: {len(lbt)}')
+
+print("Preorden")
+for n in lbt.preorder():
+    print(n.element(), end=" ")
+
+print("\nPostorden")
+for n in lbt.postorder():
+    print(n.element(), end=" ")
+
+print("\nPrimero en amplitud")
+for n in lbt.breadhfirst():
+    print(n.element(), end=" ")
+    
+print("\nInorden")
+for n in lbt.inorder():
+    print(n.element(), end=" ")

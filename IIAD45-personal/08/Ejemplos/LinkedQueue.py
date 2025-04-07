@@ -2,7 +2,6 @@ class Empty(Exception):
     pass
 
 class LinkedQueue:
-    
     class _Node:
         __slots__ = '_element', '_next'
 
@@ -16,26 +15,21 @@ class LinkedQueue:
         self._size = 0
         
     def __len__(self):
-        
         return self._size
     
     def is_empty(self):
-        
         return self._size == 0
     
     def _check_empty(self):
-        
         if self.is_empty():
             raise Empty('Cola vacia')
 
     def first(self):
-        
         self._check_empty()
 
         return self._head._element
     
     def dequeue(self):
-        
         self._check_empty()
         
         answer = self._head._element
@@ -48,7 +42,6 @@ class LinkedQueue:
         return answer
     
     def enqueue(self, e):
-        
         newest = self._Node(e, None)
         
         if self.is_empty():
@@ -58,5 +51,3 @@ class LinkedQueue:
         
         self._tail = newest
         self._size += 1
-        
-        

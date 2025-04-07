@@ -63,12 +63,12 @@ class Tree:
         else:
             return 1 + self.depth(self.parent(p))
         
-    def height(self, p=None):
+    def height(self, p = None):
         """Devuelve la altura del subarbol con raiz en la posicion p
         Si p e None, devuelve la altura del arbol entero"""
         if p is None:
             p = self.root()
-        return self._hight2(p)
+        return self._height2(p)
     
     def _height2(self, p):
         """Devuelve la altura del subarbol con raiz en la posicion p"""
@@ -85,7 +85,7 @@ class Tree:
     def preorden(self):
         """Genera una iteracion preorden de posiciones en el arbol"""
         if not self.is_empty():
-            for p in self._subtree_preorder(self, p):
+            for p in self._subtree_preorder(self.root()):
                 yield p
                 
     def _subtree_preorder(self, p):
@@ -97,3 +97,56 @@ class Tree:
     def positions(self):
         """Genera una iteracion de las posiciones del arbol"""
         return self.preorden()
+    
+    def postorder(self):
+        """Genera una iteracion postorden de posiciones en el arbol"""
+
+        if not self.is_empty():
+            for p in self._subtree_postorder(self.root()):
+                yield p
+                
+    def _subtree_postorder(self, p):
+        """Genera una iteraion posorden de posiciones en el arbol con raiz p"""
+
+        for c in self.children(p):
+            for other in self._subtree_postorder(c):
+                yield other
+                
+        yield p
+        
+    def inorder(self):
+        """Genera una iteraionc onorden de posiciones en el arbol"""
+
+        if not self.is_empty():
+            for p in self._subtree_inorden(self.root()):
+                yield p
+                
+    def _subtree_inorden(self, p):
+        """Genera una iteracion inorden de posiciones en un subarbol etiquetado como p"""    
+
+        children = list(self.children(p))
+        mid = len(children) // 2
+        
+        for j in range(mid):
+            yield from self._subtree_inorden(children[j]) 
+
+        yield p
+
+        for j in range(mid, len(children)):
+            yield from self._subtree_inorden(children[j]) 
+            
+    def bradhfirst(self):
+        """Genera una iteracion primer en amplitud de las posiciones del arbol"""
+        from LinkedQueue import LinkedQueue
+        
+        if not self.is_empty():
+            fringe = LinkedQueue()
+            fringe.enqueue(self.root())
+
+            while not fringe.is_empty():
+                p = fringe.dequeue()
+
+                yield p
+                
+                for c in self.children(p):
+                    fringe.enqueue(c)

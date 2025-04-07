@@ -1,166 +1,167 @@
-from datetime import datetime
+from BinaryTree import BinaryTree
 
-# Clase Producto (únicamente maneja productos del menú)
-class Producto:
-    def __init__(self, nombre, precio, categoria):
-        self.nombre = nombre
-        self.precio = precio
-        self.categoria = categoria
+class AVLTree(BinaryTree):
+    """Representación de un árbol AVL con un árbol binario enlazado"""
 
-# Clase Cliente (únicamente maneja información de clientes)
-class Cliente:
-    def __init__(self, nombre, telefono):
-        self.nombre = nombre
-        self.telefono = telefono
-        self.pedidos_realizados = 0  # Contador de pedidos para aplicar descuentos
+    class _Node:
+        __slots__ = '_element', '_parent', '_left', '_right', '_height'
 
-# Clase Pedido (únicamente maneja pedidos)
-class Pedido:
-    ESTADOS = ["Pendiente", "En preparación", "Listo"]
+        def __init__(self, element, parent=None, left=None, right=None):
+            self._element = element
+            self._parent = parent
+            self._left = left
+            self._right = right
+            self._height = 0  # Altura inicial del nodo es 0
 
-    def __init__(self, numero_pedido, cliente, productos):
-        self.numero_pedido = numero_pedido
-        self.cliente = cliente
-        self.productos = productos
-        self.hora_pedido = datetime.now()
-        self.estado = "Pendiente"
+    class Position(BinaryTree.Position):
+        """Una abstracción que representa la ubicación de un elemento"""
 
-    def calcular_total(self):
-        total = sum(p.precio for p in self.productos)
+        def __init__(self, container, node):
+            self._container = container
+            self._node = node
 
-        # Aplicar descuento si el total supera $100
-        if total > 100:
-            total *= 0.9  # Descuento del 10%
+        def element(self):
+            """Devuelve el elemento almacenado en esta posición"""
+            return self._node._element
 
-        # Aplicar descuento adicional si el cliente ha hecho más de 5 pedidos
-        if self.cliente.pedidos_realizados > 5:
-            total *= 0.95  # Descuento adicional del 5%
+        def __eq__(self, other):
+            """Devuelve True si other representa la misma posición"""
+            return type(other) is type(self) and other._node is self._node
 
-        return round(total, 2)
+    def _validate(self, p):
+        """Devuelve el nodo asociado, si la posición es válida"""
+        if not isinstance(p, self.Position):
+            raise TypeError('p debe ser de tipo Position')
+        if p._container is not self:
+            raise ValueError('p no pertenece a este contenedor')
+        if p._node._parent is p._node:
+            raise ValueError('p ya no es válido')
+        return p._node
 
-    def aplicar_bonificaciones(self):
-        if len(self.productos) > 5:
-            bebida_gratis = Producto("Bebida Gratis", 0, "Bebida")
-            self.productos.append(bebida_gratis)
+    def _make_position(self, node):
+        """Devuelve una instancia de Position para un nodo"""
+        return self.Position(self, node) if node is not None else None
 
-    def actualizar_estado(self, nuevo_estado):
-        if nuevo_estado in self.ESTADOS:
-            self.estado = nuevo_estado
+    # ------------------------- Métodos del Árbol AVL ----------------------
+
+    def _update_height(self, node):
+        """Actualiza la altura del nodo."""
+        if node is None:
+            return -1
+        left_height = node._left._height if node._left else -1
+        right_height = node._right._height if node._right else -1
+        node._height = 1 + max(left_height, right_height)
+        return node._height
+
+    def _balance_factor(self, node):
+        """Devuelve el factor de balance de un nodo (altura subárbol izquierdo - altura subárbol derecho)"""
+        left_height = node._left._height if node._left else -1
+        right_height = node._right._height if node._right else -1
+        return left_height - right_height
+
+    def _rotate_left(self, node):
+        """Realiza una rotación a la izquierda."""
+        new_root = node._right
+        node._right = new_root._left
+        if new_root._left:
+            new_root._left._parent = node
+        new_root._parent = node._parent
+        if node._parent is None:
+            self._root = new_root
+        elif node == node._parent._left:
+            node._parent._left = new_root
         else:
-            print("Estado inválido.")
+            node._parent._right = new_root
+        new_root._left = node
+        node._parent = new_root
 
-# Clase Estacionamiento (únicamente maneja la gestión del restaurante)
-class Restaurante:
-    def __init__(self):
-        self.menu = {}  # Diccionario de productos disponibles
-        self.clientes = {}  # Diccionario de clientes registrados
-        self.pedidos = {}  # Diccionario de pedidos en curso
-        self.contador_pedidos = 1  # Generador de números de pedido
+        # Actualizamos las alturas de los nodos involucrados
+        self._update_height(node)
+        self._update_height(new_root)
 
-    def agregar_producto(self, nombre, precio, categoria):
-        self.menu[nombre] = Producto(nombre, precio, categoria)
-        print(f"Producto '{nombre}' agregado al menú.")
+    def _rotate_right(self, node):
+        """Realiza una rotación a la derecha."""
+        new_root = node._left
+        node._left = new_root._right
+        if new_root._right:
+            new_root._right._parent = node
+        new_root._parent = node._parent
+        if node._parent is None:
+            self._root = new_root
+        elif node == node._parent._right:
+            node._parent._right = new_root
+        else:
+            node._parent._left = new_root
+        new_root._right = node
+        node._parent = new_root
 
-    def registrar_cliente(self, nombre, telefono):
-        if telefono in self.clientes:
-            print("Cliente ya registrado.")
-            return
-        self.clientes[telefono] = Cliente(nombre, telefono)
-        print(f"Cliente '{nombre}' registrado.")
+        # Actualizamos las alturas de los nodos involucrados
+        self._update_height(node)
+        self._update_height(new_root)
 
-    def realizar_pedido(self, telefono_cliente, productos_solicitados):
-        if telefono_cliente not in self.clientes:
-            print("Cliente no encontrado. Regístrelo primero.")
-            return
+    def _rebalance(self, node):
+        """Realiza rotaciones si el árbol está desequilibrado."""
+        while node is not None:
+            self._update_height(node)
+            balance = self._balance_factor(node)
 
-        cliente = self.clientes[telefono_cliente]
-        productos_pedido = []
+            if balance > 1:  # Desbalanceo hacia la izquierda
+                if self._balance_factor(node._left) < 0:
+                    self._rotate_left(node._left)
+                self._rotate_right(node)
+            elif balance < -1:  # Desbalanceo hacia la derecha
+                if self._balance_factor(node._right) > 0:
+                    self._rotate_right(node._right)
+                self._rotate_left(node)
 
-        for nombre_producto in productos_solicitados:
-            if nombre_producto in self.menu:
-                productos_pedido.append(self.menu[nombre_producto])
+            node = node._parent
+
+    def _add_root(self, e):
+        """Pone el elemento e en la raíz del árbol vacío y devuelve la posición."""
+        if self._root is not None:
+            raise ValueError('Raíz ya existe')
+        self._root = self._Node(e)
+        self._size = 1
+        return self._make_position(self._root)
+
+    def _add_left(self, p, e):
+        """Agrega un hijo izquierdo para la posición p"""
+        node = self._validate(p)
+        if node._left is not None:
+            raise ValueError('Ya existe un hijo izquierdo')
+        node._left = self._Node(e, node)
+        self._size += 1
+        self._rebalance(node._left)  # Reequilibrar después de la inserción
+        return self._make_position(node._left)
+
+    def _add_right(self, p, e):
+        """Agrega un hijo derecho para la posición p"""
+        node = self._validate(p)
+        if node._right is not None:
+            raise ValueError('Ya existe un hijo derecho')
+        node._right = self._Node(e, node)
+        self._size += 1
+        self._rebalance(node._right)  # Reequilibrar después de la inserción
+        return self._make_position(node._right)
+
+    def _delete(self, p):
+        """Elimina el nodo en la posición p y lo reemplaza con su hijo"""
+        node = self._validate(p)
+        if self.num_children(p) == 2:
+            raise ValueError('El nodo tiene dos hijos')
+        child = node._left if node._left else node._right
+        if child is not None:
+            child._parent = node._parent
+        if node is self._root:
+            self._root = child
+        else:
+            parent = node._parent
+            if node == parent._left:
+                parent._left = child
             else:
-                print(f"Producto '{nombre_producto}' no encontrado en el menú.")
+                parent._right = child
 
-        if not productos_pedido:
-            print("No se pudo crear el pedido. No hay productos válidos.")
-            return
-
-        pedido = Pedido(self.contador_pedidos, cliente, productos_pedido)
-        pedido.aplicar_bonificaciones()
-
-        self.pedidos[self.contador_pedidos] = pedido
-        cliente.pedidos_realizados += 1  # Aumenta el contador de pedidos del cliente
-        print(f"Pedido #{pedido.numero_pedido} creado para {cliente.nombre}. Total: ${pedido.calcular_total()}")
-        self.contador_pedidos += 1
-
-    def mostrar_pedidos(self):
-        if not self.pedidos:
-            print("No hay pedidos en curso.")
-            return
-
-        print("\nPedidos en curso:")
-        for pedido in self.pedidos.values():
-            print(f"Pedido #{pedido.numero_pedido} - Cliente: {pedido.cliente.nombre} - Estado: {pedido.estado} - Total: ${pedido.calcular_total()}")
-
-    def actualizar_estado_pedido(self, numero_pedido, nuevo_estado):
-        if numero_pedido not in self.pedidos:
-            print("Pedido no encontrado.")
-            return
-        self.pedidos[numero_pedido].actualizar_estado(nuevo_estado)
-        print(f"Pedido #{numero_pedido} actualizado a estado '{nuevo_estado}'.")
-
-    def cancelar_pedido(self, numero_pedido):
-        if numero_pedido in self.pedidos and self.pedidos[numero_pedido].estado == "Pendiente":
-            del self.pedidos[numero_pedido]
-            print(f"Pedido #{numero_pedido} cancelado.")
-        else:
-            print("No se puede cancelar este pedido.")
-
-# Menú interactivo
-restaurante = Restaurante()
-
-# Agregamos algunos productos al menú
-restaurante.agregar_producto("Pizza", 20, "Plato Fuerte")
-restaurante.agregar_producto("Hamburguesa", 15, "Plato Fuerte")
-restaurante.agregar_producto("Papas Fritas", 5, "Entrada")
-restaurante.agregar_producto("Refresco", 3, "Bebida")
-
-while True:
-    print("\n1. Registrar cliente")
-    print("2. Hacer pedido")
-    print("3. Mostrar pedidos")
-    print("4. Cambiar estado de pedido")
-    print("5. Cancelar pedido")
-    print("6. Salir")
-    
-    opcion = input("Seleccione una opción: ")
-
-    if opcion == "1":
-        nombre = input("Ingrese el nombre del cliente: ")
-        telefono = input("Ingrese el teléfono del cliente: ")
-        restaurante.registrar_cliente(nombre, telefono)
-
-    elif opcion == "2":
-        telefono = input("Ingrese el teléfono del cliente: ")
-        productos = input("Ingrese los productos separados por coma: ").split(", ")
-        restaurante.realizar_pedido(telefono, productos)
-
-    elif opcion == "3":
-        restaurante.mostrar_pedidos()
-
-    elif opcion == "4":
-        numero_pedido = int(input("Ingrese el número de pedido: "))
-        nuevo_estado = input("Ingrese el nuevo estado (Pendiente, En preparación, Listo): ")
-        restaurante.actualizar_estado_pedido(numero_pedido, nuevo_estado)
-
-    elif opcion == "5":
-        numero_pedido = int(input("Ingrese el número de pedido a cancelar: "))
-        restaurante.cancelar_pedido(numero_pedido)
-
-    elif opcion == "6":
-        print("Saliendo del sistema...")
-        break
-
-    else:
-        print("Opción no válida. Intente de nuevo.")
+        self._size -= 1
+        self._rebalance(child)  # Reequilibrar después de la eliminación
+        node._parent = node
+        return node._element
