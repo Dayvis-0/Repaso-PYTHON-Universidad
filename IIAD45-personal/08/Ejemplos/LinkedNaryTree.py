@@ -23,11 +23,11 @@ class LinkedNAryTree(NArioTree):
             return self._node._element
 
         def __eq__(self, other):
-            """Devuelve True sssi representa la misma posicon"""
+            """Devuelve True si representa la misma posicion"""
             return type(other) is type(self) and other._node is self._node
         
     def _validate(self, p):
-        """VErifica si la posicon p es valida y devuelve su nodo"""
+        """Verifica si la posicion p es valida y devuelve su nodo"""
         if not isinstance(p, self.Position):
             raise TypeError('p debee se de tipo Position')
         if p._container is not self:
