@@ -142,13 +142,82 @@ class UndirectedGraph:
 
         node_to_element = {idx: node._element for idx, node in enumerate(self._nodes)}
 
-        header = "   " + " ".join(str(node_to_element[i]) for i in range(self._size))
+        header = "   " + "  ".join(str(node_to_element[i]) for i in range(self._size))
         print(header)
 
         for i in range(self._size):
-            row = " ".join(str(matrix[i][j]) for j in range(self._size))
+            row = "  ".join(str(matrix[i][j]) for j in range(self._size))
             print(f"{node_to_element[i]}: {row}")
+            
+    def find_articulation_points(self):
+        """Encuentra y devuelve los puntos de articulacoin del grafo"""
+        time = [0] # Tiempo de desccubrimiento (envolver en llista para que sea mutable)
+        visited = set()
+        disc = {}
+        low = {}
+        parent = {}
+        articulation_points = set()
 
+        def dfs(u, u_pos):
+            visited.add(u)
+            disc[u] = low[u] = time[0]
+            time[0] += 1
+            children = 0
+            
+            for v_pos in self.adjacent(u_pos):
+                v = v_pos.element()
+
+                if v not in visited:
+                    parent[v] = u
+                    children += 1
+                    dfs(v, v_pos)
+                    low[u] = min(low[u], low[v])
+
+                    if u not in parent and children > 1:
+                        articulation_points.add(u)
+                    if u in parent and low[v] >= disc[u]:
+                        articulation_points.add(u)
+                elif v != parent.get(u, None):
+                    low[u] = min(low[u], disc[v])
+        
+        for node in self._nodes:
+            u = node._element
+            
+            if u not in visited:
+                dfs(u, self._make_positon(node))
+
+        return articulation_points
+    
+    def caminos_matrix(self):
+        """Devuelve la  matriz de caminos (accesibilidad) del grafo"""
+        elementos = [node._element for node in self._nodes]
+        index_map = {element: i for i, element in enumerate(elementos)}
+        n = len(elementos)
+
+        # Inicializar la matriz de adyacencia
+        matrix = [[0] * n for _ in range(n)]
+        
+        for i, node in enumerate(self._nodes):
+                for neighbor in node._adjacent:
+                    j = index_map[neighbor._element]
+                    matrix[i][j] = 1
+                    
+        # Algoritmo de Floyd-Warshall para caminos
+        for k in range(n):
+            for i in range(n):
+                for j in range(n):
+                    if matrix[i][k] and matrix[k][j]:
+                        matrix[i][j] = 1
+                        
+        # Mostrar la matriz de indices
+        print("   ", "  ".join(str(el) for el in elementos))
+        for i, row in enumerate(matrix):
+            print(f"{elementos[i]} :", "  ".join(str(cell) for cell in row))
+
+        return matrix
+    
+    def 
+            
     """def __str__(self):
         Devuelve una representacion en cadena del grafo
         1: [2]
@@ -200,7 +269,7 @@ gr1.add_edge(a_2, a_4)
 # Forma visual del grafo
 # print(gr1)
 
-print(f'Lista de adyacencia del grafo')
+print(f'Lista de adyacencia del grafo nodirigdo | Cada elemento contienen la lista de vertices adyacentes de un vertice')
 print(gr1.adjacency_list())
 
 print(f'\nRecorrido en profundidad | Rama mas profunda y retrocede')
@@ -209,5 +278,10 @@ print(gr1.depth_first_search(a_1))
 print(f'\nRecorrido en anchura | Nodos vecinos - nodos mas distantes')
 print(gr1.breadth_first_search(a_1))
 
-print(f'\nMatriz de adyacencia:')
+print(f'\nMatriz de adyacencia | Conexiones directas entre nodos')
 gr1.print_adjacency_matrix()
+
+print(f'\nMatriz de camino | Representa si existe un camino (cualquier longitud, directo o indirecto) entre dos nodos')
+gr1.caminos_matrix()
+
+print(f'\nPuntos de circulacion | Nodos que, si se eliminan, desconectan partes del grafo \n{gr1.find_articulation_points()}')
