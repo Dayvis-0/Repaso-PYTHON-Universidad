@@ -1,6 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-    
+import heapq    
+
 class DirectedGraph:
     """Representacion enlazada de un rafo dirigido"""
 
@@ -195,6 +196,55 @@ class DirectedGraph:
             dfs(self._make_position(node))
             
         return stack[::-1]
+    
+    def dijkstra(self, start_pos):
+        """Implementa el algoritmo de Dijstra para encontrar el camino mas corto desde un nodo fuente"""
+        # Inicializar la distancia a todos los nodos como infinito 
+        distances = {node._element: float('inf') for node in self._nodes}
+        distances[start_pos.element()] = 0 # La distancia al nodo fuente es 0
+        # Inicializar el diccionario de padres para recontruir el camino mas corto
+        parents = {node._element: None for node in self._nodes}
+        # Usamos una cola de prioriadad para seleccionar el nodo con la distancnia mas corta
+        pq = [(0, start_pos)]
+
+        while pq:
+            current_distance, current_node_pos = heapq.heappop(pq)
+            current_node = current_node_pos.element()
+            
+            # Si la distancia actual es mayor que la ya encontrada, saltamos este nodo
+            if current_distance > distances[current_node]:
+                continue
+            
+            # Recorremos los nodos adyacentes
+            for neighbor_pos in self.adjacent(current_node_pos):
+                neighbor = neighbor_pos.element()
+                weight = 1 # Asumimo 1, aunque puedes cambiarlo por un pero variable
+                new_distance = current_distance + weight
+                # Si encontramos una distancia mas corta, la actualizamos
+                if new_distance < distances[neighbor]:
+                    distances[neighbor] = new_distance
+                    parents[neighbor] = current_node
+                    heapq.heappush(pq, (new_distance, neighbor_pos))
+
+        # Reconstruir el camino mas corto
+        def reconstruct_path(end_pos):
+            path = []
+            current = end_pos.element()
+
+            while current is not None:
+                path.append(current)
+                current = parents[current]
+
+            return path[::-1]
+
+        return distances, {node._element: reconstruct_path(self._make_position(node)) for node in self._nodes}
+    
+    def primt(self, start_posi):
+        """Implementa el algoritmo de Prim para encontrar el arbol de expansion MInima (MST) en un grafo dirigido"""
+        # Inicializacion de estructura necesaria
+        mst_edges = [] # Aqui guardaremos las aristas del MST
+        visited = set() # Conjunto de nodos visitados
+        pq = [] # Cola de prioridad para seleccionar las aristas 
                 
     def __str__(self):
         """Devuelve una representacion visual del grafo dirigido"""
@@ -246,3 +296,13 @@ print(articulation_points)
 
 print("Ordenacion Topologica | Cada arista dirigida u -> v, el nodo u aparece antes que v")
 print(grd1.topological_sort())
+
+print("Algoritmo de Dijkstra | Nodos mas cortos desde un origen hasta todos los demas nodos > 0")
+distances, paths = grd1.dijkstra(a_1)
+print(f"Distancias mas cortas desde el nodo 1:")
+for node, distance in distances.items():
+    print(f"Distancia al nodo {node}: {distance}")
+
+print(f"\nCaminos mas cortos desde el nodo 1:")
+for node, path in paths.items():
+    print(f"Camino al nodo {node}: {" -> ".join(map(str, path))}")

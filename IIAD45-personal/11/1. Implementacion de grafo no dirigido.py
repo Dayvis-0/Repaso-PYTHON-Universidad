@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import heapq
 
 class UndirectedGraph:
     """Representacion enlazada de un grafo no dirigido"""
@@ -216,8 +217,127 @@ class UndirectedGraph:
 
         return matrix
     
-    def 
+    def dijkstra(self, start_pos):
+        """aplica el algoritmo de Dijstra para encontrar el camino mas corto desde start_pos"""
+        start_node = self._validate(start_pos)        
+        # Inicializar las distancias a infinito, excepto el nodo de inicio
+        distances = {node._element: float('inf') for node in self._nodes}
+        distances[start_node._element] = 0
+        
+        # Usamos una cola de prioridad (min-heap) con elementos (distancia, nodo)
+        heap = [(0, start_node._element)] 
+        visited = set() # Para evitar porcesar el mismo nodo mas de una vez
+
+        while heap:
+            current_dist, current_element = heapq.heappop(heap)
             
+            if current_element in visited:
+                continue
+            
+            visited.add(current_element)
+            # Buscar el nodo correspondiente a current_element
+            current_node = next((node for node in self._nodes if node._element == current_element),None)
+            if current_node is None:
+                continue
+            
+            # Procesar los vecinos
+            for neighbor in current_node._adjacent:
+                neighbor_element = neighbor._element
+                # Calcular la distancia al vecino
+                distance = current_dist + 1 # Asumimos peso 1 para las aristas 
+                # Si encontramos una ruta mas corta, actualizamos
+                if distance < distances[neighbor_element]:
+                    distances[neighbor._element] = distance
+                    heapq.heappush(heap, (distance, neighbor_element)) # Usar el elemento del vecino
+
+        return distances
+    
+    def prim(self, start_pos):
+        """Aplica el algoritmo de Prim para encontrar el Arbol de Expansion Minima (MST)"""
+        start_node = self._validate(start_pos)
+        mst = []
+        visited = set()
+        min_heap = [(0, start_node._element)] # Usamos la referencia completa del nodo en lugar de su _elemento
+
+        total_weight = 0
+        
+        while min_heap:
+            weight, current_element = heapq.heappop(min_heap) # current_node es ahora la referencia completa
+
+            if current_element in visited:
+                continue
+            
+            visited.add(current_element)
+            total_weight += weight
+            
+            if weight != 0:
+                mst.append((current_element, weight)) # Guardamos el _elemen del nodo, y su peso
+                
+            current_node = next((node for node in self._nodes if node._element == current_element), None)
+            
+            if current_node is None:
+                continue
+
+            for neighbor in current_node._adjacent:
+                if neighbor._element not in visited:
+                    weight_to_neighbor = 1 # Asumimo que el peso de la arista es 1
+                    heapq.heappush(min_heap, (weight_to_neighbor, neighbor._element))
+
+        return mst, total_weight
+    
+    def kruskal(self):
+        """Aplica el algoritmo de Kruskal para encontrar el Arbol de Expansion Minima (MST)"""
+
+        #Primero, obtener todas las aristas del grafo y ordenarlas por peso
+        edges = []
+        for node in self._nodes:
+            for neighbor in node._adjacent:
+                if node._element < neighbor._element: # Evitar duplicados de aristas 
+                    edges.append((1, node._element, neighbor._element)) # Peso de las aristas, en este caso 1
+        
+        edges.sort() # ordenar por peso (primero el peso, luego los nodos)
+        # Estructura para los conjuntos disjuntos
+        parent = {}
+        rank = {}
+
+        # Inicializar cada nodo como su propio representante
+        for node in self._nodes:
+            parent[node._element] = node._element
+            rank[node._element] = 0
+            
+        # Funcion para encontrar el representante de un conjunto (con compresion de ruta)
+        def find(x):
+            if parent[x] != x:
+                parent[x] = find(parent[x])
+            return parent[x]
+
+        # Funcion para unir dos conjuntos
+        def union(x, y):
+            root_x = find(x)
+            root_y = find(y)
+
+            if root_x != root_y:
+                # Unir segun el rango(altura del arbol)
+                if rank[root_x] > rank[root_y]:
+                    parent[root_y] = root_x
+                elif rank[root_x] < rank[root_y]:
+                    parent[root_x] = root_y
+                else:
+                    parent[root_y] = root_x
+                    rank[root_x] += 1
+               
+        # Aplicar el algoritmo de Kruskal     
+        mst = [] # Arbol de expansion minima (MST)
+        total_wight = 0
+        
+        for wight, u, v in edges:
+            if find(u) != find(v): # Si u y v no estan en el mismo conjunto
+                mst.append((u,v, wight)) 
+                total_wight += wight
+                union(u, v) # Unir los conjuntos de u y v
+            
+        return mst, total_wight
+
     """def __str__(self):
         Devuelve una representacion en cadena del grafo
         1: [2]
@@ -281,7 +401,23 @@ print(gr1.breadth_first_search(a_1))
 print(f'\nMatriz de adyacencia | Conexiones directas entre nodos')
 gr1.print_adjacency_matrix()
 
-print(f'\nMatriz de camino | Representa si existe un camino (cualquier longitud, directo o indirecto) entre dos nodos')
+print(f'\nMatriz de camino Floyd-Warshall | Representa si existe un camino (cualquier longitud, directo o indirecto) entre dos nodos')
 gr1.caminos_matrix()
 
 print(f'\nPuntos de circulacion | Nodos que, si se eliminan, desconectan partes del grafo \n{gr1.find_articulation_points()}')
+
+print(f'\nAlgoritmo de Dijkstra | Nodos mas cortos desde un origen a todos los demas nodos > 0\n{gr1.dijkstra(a_1)}')
+
+print(f'\nAlgoritmo de Prim | Encontrar el arbol de expansion minima de un grafo no dirigido y ponderado con sus nodos')
+mst, total_wight = gr1.prim(a_1)
+print(f'Aristas selecccionadas (nodo, peso):\n\nNodo: {a_1.element()}, Peso: 0')
+
+for edge in mst:
+    print(f"Nodo: {edge[0]}, Peso: {edge[1]}")
+print(f"\nPeso total del Arbol de Expansion Minima: {total_wight}")
+
+print(f'\nAlgoritmo de Prim | Encontrar el arbol de expansion minima de un grafo no dirigido y ponderado con sus aristas')
+mst1, total_wight1 = gr1.kruskal()
+for edge in mst1:
+    print(f"Nodo: {edge[0]} - {edge[1]}, Peso: {edge[2]}")
+print(f"\nPeso total del Arbol de Expansion Minima: {total_wight1}")
