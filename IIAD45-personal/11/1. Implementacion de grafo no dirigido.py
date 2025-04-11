@@ -223,7 +223,7 @@ class UndirectedGraph:
         # Inicializar las distancias a infinito, excepto el nodo de inicio
         distances = {node._element: float('inf') for node in self._nodes}
         distances[start_node._element] = 0
-        
+        parents = {node._element: None for node in self._nodes}
         # Usamos una cola de prioridad (min-heap) con elementos (distancia, nodo)
         heap = [(0, start_node._element)] 
         visited = set() # Para evitar porcesar el mismo nodo mas de una vez
@@ -248,9 +248,23 @@ class UndirectedGraph:
                 # Si encontramos una ruta mas corta, actualizamos
                 if distance < distances[neighbor_element]:
                     distances[neighbor._element] = distance
+                    parents[neighbor_element] = current_element # Guardamos el nodoo anterior
                     heapq.heappush(heap, (distance, neighbor_element)) # Usar el elemento del vecino
 
-        return distances
+        # Funcion para contruir el camino mas corto
+        def reconstruct_path(end_pos):
+            path = []
+            current = end_pos
+
+            while current is not None:
+                path.append(current)
+                current = parents[current]
+
+            return path[::-1]
+        
+        paths = {node._element: reconstruct_path(node._element) for node in self._nodes}
+
+        return distances, paths
     
     def prim(self, start_pos):
         """Aplica el algoritmo de Prim para encontrar el Arbol de Expansion Minima (MST)"""
@@ -406,7 +420,15 @@ gr1.caminos_matrix()
 
 print(f'\nPuntos de circulacion | Nodos que, si se eliminan, desconectan partes del grafo \n{gr1.find_articulation_points()}')
 
-print(f'\nAlgoritmo de Dijkstra | Nodos mas cortos desde un origen a todos los demas nodos > 0\n{gr1.dijkstra(a_1)}')
+print(f'\nAlgoritmo de Dijkstra | Ditancia mas corta desde el nodo de inicio a todos los demas\nNodos mas cortos desde un origen a todos los demas nodos > 0')
+distances,paths = gr1.dijkstra(a_1)
+print(f'\nDistancias mas cortos desde el nodo {a_1.element()}')
+for node, distance in distances.items():
+    print(f"Distacnia al nodo {node}: {distance}")
+    
+print(f"\nCaminos mas cortos desde el nodod {a_1.element()}")
+for node, path in paths.items():
+    print(f"Camino al nodo {node}: {" -> ".join(map(str, path))}")
 
 print(f'\nAlgoritmo de Prim | Encontrar el arbol de expansion minima de un grafo no dirigido y ponderado con sus nodos')
 mst, total_wight = gr1.prim(a_1)
@@ -416,7 +438,7 @@ for edge in mst:
     print(f"Nodo: {edge[0]}, Peso: {edge[1]}")
 print(f"\nPeso total del Arbol de Expansion Minima: {total_wight}")
 
-print(f'\nAlgoritmo de Prim | Encontrar el arbol de expansion minima de un grafo no dirigido y ponderado con sus aristas')
+print(f'\nAlgoritmo de Kruskal | Encontrar el arbol de expansion minima de un grafo no dirigido y ponderado con sus aristas')
 mst1, total_wight1 = gr1.kruskal()
 for edge in mst1:
     print(f"Nodo: {edge[0]} - {edge[1]}, Peso: {edge[2]}")

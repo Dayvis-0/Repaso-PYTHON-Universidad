@@ -239,13 +239,7 @@ class DirectedGraph:
 
         return distances, {node._element: reconstruct_path(self._make_position(node)) for node in self._nodes}
     
-    def primt(self, start_posi):
-        """Implementa el algoritmo de Prim para encontrar el arbol de expansion MInima (MST) en un grafo dirigido"""
-        # Inicializacion de estructura necesaria
-        mst_edges = [] # Aqui guardaremos las aristas del MST
-        visited = set() # Conjunto de nodos visitados
-        pq = [] # Cola de prioridad para seleccionar las aristas 
-                
+
     def __str__(self):
         """Devuelve una representacion visual del grafo dirigido"""
         if self._size == 0:
@@ -294,12 +288,12 @@ articulation_points = grd1.find_articulation_points()
 print(f"\nPuntos de articulacion | Nodos que, si se eliminan, desconectan partes del grafo")
 print(articulation_points)
 
-print("Ordenacion Topologica | Cada arista dirigida u -> v, el nodo u aparece antes que v")
+print("\nOrdenacion Topologica | Cada arista dirigida u -> v, el nodo u aparece antes que v")
 print(grd1.topological_sort())
 
-print("Algoritmo de Dijkstra | Nodos mas cortos desde un origen hasta todos los demas nodos > 0")
+print(f"\nAlgoritmo de Dijkstra | Nodos mas cortos desde un origen hasta todos los demas nodos > 0")
 distances, paths = grd1.dijkstra(a_1)
-print(f"Distancias mas cortas desde el nodo 1:")
+print(f"\nDistancias mas cortas desde el nodo 1:")
 for node, distance in distances.items():
     print(f"Distancia al nodo {node}: {distance}")
 
