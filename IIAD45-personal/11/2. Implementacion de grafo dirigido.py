@@ -271,7 +271,7 @@ grd1.add_edge(a_1, a_2)
 grd1.add_edge(a_2, a_3)
 
 # Representacion visual del grafo dirigido
-# print(grd1)
+print(grd1)
 print(f"Lista ed adyacencia del grafo dirigido | Cada elemento contienen la lista de vertices adyacentes de un vertice")
 print(grd1.adjacency_list())
 
