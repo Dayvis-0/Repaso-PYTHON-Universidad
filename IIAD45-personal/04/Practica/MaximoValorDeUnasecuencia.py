@@ -1,4 +1,4 @@
-def maximo(lista, n=None):
+def maximo(lista):
 
     if len(lista) == 1:
         return lista[0]
@@ -9,6 +9,6 @@ def maximo(lista, n=None):
 
     return izqui if izqui > dere else dere
 
-nume = [10,2,3,4]
+nume = [10,2,1000, 3,4]
 
 print(maximo(nume))
