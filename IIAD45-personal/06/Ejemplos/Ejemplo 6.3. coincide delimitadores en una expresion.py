@@ -11,23 +11,18 @@ def empareja(expresion):
     S = ArrayStack()
     
     for c in expresion:
-        
         if c in apertura:
             S.push(c)
-        
         elif c in cierre:
-            
             if S.is_empty():
-        
                 return False
 
             if cierre.index(c) != apertura.index(S.pop()):
-                
                 return False
 
     return S.is_empty()       
 
-if empareja('(2+2)'):
+if empareja('({})'):
     print('Los delimitadores coinciden')
 
 else:

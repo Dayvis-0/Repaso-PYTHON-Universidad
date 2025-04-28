@@ -22,7 +22,6 @@ def empareja_html(raw):
         else:
             if S.is_empty():
                 return False
-            
             if etiqueta[1:] != S.pop():
                 return False
             

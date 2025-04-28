@@ -4,15 +4,21 @@
     Salida: cierto
     Explicacion: 121 se lee como 121 de ixquierda a derecha y de derecha a izquierda
 #* Ejemplo 2:
-    x = -121 | falso | -121 != 121-"""
+    x = -121 | falso | -121 != 121-
+    
+* -2^31 <= x <= 2^31-1
+Hacerlo sin convertirlo a cadena"""
 
 class Solution:
     def isPolindrome(self, x: int) -> bool:
-        x_srt = str(x) 
-        resu = x_srt
-        cont = -1
 
-        for j in range(len(x_srt)//2):
-            aux = x_srt[-1]
-            resu[j] = x_srt[aux]
+        mult = 1
+        resu = 0
+        divi = x % 10
+                
+        while divi > 0:
+            resu = (divi)*mult + resu
+            divi = divi % 10
+            mult *= 10
             
+print()
