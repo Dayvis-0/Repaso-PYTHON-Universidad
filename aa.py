@@ -1,3 +1,3 @@
 nume = [1,2,3]
 
-print(nume[1:])
+print(nume.index(1))

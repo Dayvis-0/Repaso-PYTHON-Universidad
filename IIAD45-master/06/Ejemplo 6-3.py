@@ -4,7 +4,7 @@ from ArrayStack import ArrayStack
 
 def empareja(expr):
     """Devuelve True si los delimitadores coinciden"""
-    apertura = '([}'
+    apertura = '([{'
     cierre = ')]}'
     S = ArrayStack()
     for c in expr:

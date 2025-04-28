@@ -13,29 +13,24 @@ def empareja_html(raw):
         k = raw.find('>', j+1)
         
         if k == -1:
-            
-            return False
+            return False  
         
         etiqueta = raw[j+1:k]
         
         if not etiqueta.startswith('/'):
             S.push(etiqueta)
-            
         else:
-            
             if S.is_empty():
-                 
                 return False
             
             if etiqueta[1:] != S.pop():
-                
                 return False
             
         j = raw.find('<', k+1)
         
     return S.is_empty()
 
-if empareja_html('<name>Hola</name>'):
+if empareja_html('<h1>Hola</h1>'):
     print('Las etiquetas coinciden')
     
 else:

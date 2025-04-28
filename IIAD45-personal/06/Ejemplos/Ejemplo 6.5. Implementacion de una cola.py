@@ -88,4 +88,4 @@ print(col)
 
 print(col.dequeue())
 
-print(col)
+print(f"{col} \nFirst: {col.first()}")

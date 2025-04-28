@@ -15,4 +15,4 @@ def insertar_ordenar(A):
     
     return A
         
-print(insertar_ordenar([1,5,4]))
+print(insertar_ordenar([1,5,4,2,3,]))

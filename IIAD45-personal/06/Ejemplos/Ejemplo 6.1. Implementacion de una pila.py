@@ -1,5 +1,5 @@
 # Implementacion de una pila usando una lista
-# LIFO (LLast input, first output) - (Ultimo en entrar, primero en salir)
+# LIFO (Last input, first output) - (Ultimo en entrar, primero en salir)
 
 class Empty(Exception):
     
@@ -24,7 +24,7 @@ class ArrayStack:
         return len(self._data) == 0
     
     def push(self, e):
-        """Agrega el elemento e a la classe de la pila"""
+        """Agrega el elemento e a la clase de la pila"""
         
         self._data.append(e)
         
@@ -61,6 +61,6 @@ pila.push(3)
 
 print(pila)
 
-pila.pop()
+n = pila.pop()
 
 print(pila)
