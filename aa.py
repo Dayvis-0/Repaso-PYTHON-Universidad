@@ -1,3 +1,3 @@
-nume = [1,2,3]
+text = "hola"
 
-print(nume.index(1))
+print(text.index(-1))
