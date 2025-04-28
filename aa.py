@@ -1,3 +1,2 @@
-text = "hola"
-
-print(text.index(-1))
+nume = 123
+print(list(nume))

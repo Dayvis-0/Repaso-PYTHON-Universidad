@@ -5,7 +5,7 @@ salida = 0
 Explicacion: El personaje 'l' en el indice 0 es el primer caracter que no ocurre en ningun otro indice"""
 
 # Complejidad temporal O(n^2) y complejidad espacial O(1)
-def prime_cara_no_re(text):
+def prime_cara_no_re(text: str) -> int:
     
     for c in text:
         cont = text.count(c)
@@ -17,8 +17,8 @@ def prime_cara_no_re(text):
         
         cont = 0
     
-# Complejidad O(n)    
-def prime_cara_no_re1(text):
+# Complejidad temporal y espacial O(n)    
+def prime_cara_no_re1(text: str) -> int:
 
     cont = {}
 

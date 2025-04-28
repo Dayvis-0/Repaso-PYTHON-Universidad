@@ -1,16 +1,10 @@
-"""Dada una matriz de enteros nums y un numero entero target, regreso indices de los dos numeros
-de tal manera que sunmen target
-
-Puede suponer que cada entraada tendria exatamente una solucion y no puede  usar el igual dos veces
-
+"""Dada una matriz de enteros nums y un numero entero target, regreso indices de los dos numeros de tal manera que sumen target
+Puede suponer que cada entrada tendria exatamente una solucion y no puede  usar el igual dos veces
 Puede devolver la respuesta en cualquier orden
-
 Ejemplo 1:
-
 #*  Entrada: nums = [2,7,11,15], target = 9
 #*  Salida: [0,1]
 #*  Explicacion: Porque nums[0] + nums[1] == 0, volvemos [0,1]."""
-
 """
 #! Primera solucion
 class Solution:
@@ -34,7 +28,6 @@ print(soluci)
 #! Segunda solucion
 
 class Solution1:
-    
     def twoSum(self, nums: list[int], target: int) -> list[int]:
         hashmap = {}
         for j in range(len(nums)):
