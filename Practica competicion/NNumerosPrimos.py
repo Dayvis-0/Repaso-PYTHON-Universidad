@@ -7,13 +7,17 @@ def esPrimo(x: int) -> bool:
     if x == 2:
         return True
     if x % 2 == 0:
-        return True
+        return False
     
     for j in range(3, int(math.sqrt(x)) + 1, 2):
         if x % j == 0:
             return False
         
     return True
+
+"""Complejidad
+Temporal: O(n x n log n)
+Espacial: O(n)"""
 
 def NPrimos(n: int) -> list[int]:
     nprimos = []
@@ -23,13 +27,17 @@ def NPrimos(n: int) -> list[int]:
     while cont != n:
         if esPrimo(i):
             cont += 1
-            nprimos.append(i)    
+            nprimos.append(i) 
+        i += 1    
 
     return nprimos
-        
         
 n = int(input("Cantidad de primos: "))
 
 if n >= 0:
     if n == 0:
         print("No hay numeros primos")
+    else:
+        print(NPrimos(n))
+else:
+    print("La cantidad debe de ser positivo")
