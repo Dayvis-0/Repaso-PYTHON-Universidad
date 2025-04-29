@@ -9,16 +9,26 @@
 * -2^31 <= x <= 2^31-1
 Hacerlo sin convertirlo a cadena"""
 
-class Solution:
+class Solution(object):
     def isPolindrome(self, x: int) -> bool:
+        if x < 0:
+            return False
 
-        mult = 1
         resu = 0
-        divi = x % 10
+        xcopy = x
                 
-        while divi > 0:
-            resu = (divi)*mult + resu
-            divi = divi % 10
-            mult *= 10
+        while x != 0:
+            divi = x % 10
+            resu = (resu)*10 + divi
+            x //= 10
             
-print()
+        if xcopy == resu:
+            return True
+        return False
+    
+so1 = Solution()
+
+if so1.isPolindrome(121):
+    print("Si")
+else: 
+    print("No")

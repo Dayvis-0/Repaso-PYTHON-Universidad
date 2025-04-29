@@ -1,13 +1,6 @@
-nume = 123
-resu = 0
-mult = 10
+import math
 
-while nume != 0:
-    divi = nume % 10
-    resu = (resu)*mult + divi
-    nume //= 10
+# print(int(math.sqrt(6)))
 
-print(resu)
-"""nume = 123
-print(nume % 10)
-print(nume // 10)"""
+for j in range(3,int(math.sqrt(9)) + 1+1, 2):
+    print(j)
