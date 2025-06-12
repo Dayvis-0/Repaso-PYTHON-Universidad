@@ -5,7 +5,7 @@ print('ingrese una linea en blanco para indicar el final.')
 num_notas = 0
 total_notas = 0
 terminado = 0 #cambiara a 1 si se ha terminado
-
+# Prueba 2
 while not terminado:
   nota = input()
   if nota == '':
